@@ -37,7 +37,7 @@ paths:
           description: 'The item UUID'
           schema:
             type: string
-            pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+            format: uuid
   '/low-stock-alert/{uuid}':
     post:
       description: 'Creates alert'
@@ -55,4 +55,4 @@ paths:
           description: 'The item UUID'
           schema:
             type: string
-            pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+            format: uuid
