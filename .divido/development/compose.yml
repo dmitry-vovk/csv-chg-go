@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  tests:
+    image: golang:1.14
+    container_name: tests
+    volumes:
+      - "../../:/go/src/app"
+    working_dir: /go/src/app
+    command: go test -v -failfast -p 1 -covermode=count -coverprofile=coverage.out ./...
+
+networks:
+  default:
+    external:
+      name: ${NETWORK}

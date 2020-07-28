@@ -1,0 +1,18 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+      - name: Run Tests
+        run: make ci-test
+      - name: Check Coverage
+        run: make ci-check-coverage

@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Warehouse API
+  version: 1.0.0
+paths:
+  '/item/{uuid}':
+    get:
+      description: 'Returns an item'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  quantity:
+                    type: integer
+                required:
+                  - uuid
+                  - name
+                  - quantity
+                additionalProperties: false
+        '500':
+          description: 'Internal Server Error'
+        '400':
+          description: 'Not found'
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: 'The item UUID'
+          schema:
+            type: string
+            pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+  '/low-stock-alert/{uuid}':
+    post:
+      description: 'Creates alert'
+      responses:
+        '201':
+          description: 'Successfully created'
+        '500':
+          description: 'Internal Server Error'
+        '400':
+          description: 'Not found'
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: 'The item UUID'
+          schema:
+            type: string
+            pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
