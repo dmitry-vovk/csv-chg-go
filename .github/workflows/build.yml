@@ -13,6 +13,6 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
       - name: Run Tests
-        run: make ci-test
+        run: make test
       - name: Check Coverage
-        run: make ci-check-coverage
+        run: make coverage

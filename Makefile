@@ -12,7 +12,7 @@ test:
 	docker network create $(NETWORK) || true
 	docker-compose -f ./.divido/development/compose.yml up --build --force-recreate --abort-on-container-exit
 
-check-coverage:
+coverage:
 	@docker run --rm \
 		-e MINIMUM_COVERAGE=${MINIMUM_TEST_COVERAGE} \
 		-e README_FILE=/app/README.md \
