@@ -4,13 +4,6 @@
 
 ## Intro
 
-The interview consists in a pair programming session for solving this challenge.
-
-The applicant will be provided with this repository in advance in order to get ready for the interview.
-
-We recommend the applicant to try solving the challenge ahead of the interview. However, we will only be looking at the 
-code produced during the pair programming session. This will allow us to understand how the applicant thinks.
-
 We want the applicant to exclusively focus on coding at this stage. For this reason we provide a complete suite with:
 - Makefile targets
 - Github Actions setup
