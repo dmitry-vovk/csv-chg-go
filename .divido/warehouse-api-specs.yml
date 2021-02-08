@@ -29,7 +29,7 @@ paths:
         '500':
           description: 'Internal Server Error'
         '400':
-          description: 'Not found'
+          description: 'Bad Request'
       parameters:
         - name: uuid
           in: path
@@ -47,7 +47,7 @@ paths:
         '500':
           description: 'Internal Server Error'
         '400':
-          description: 'Not found'
+          description: 'Bad Request'
       parameters:
         - name: uuid
           in: path

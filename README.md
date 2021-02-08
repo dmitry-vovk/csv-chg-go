@@ -1,3 +1,5 @@
+![coverage-badge-do-not-edit](https://img.shields.io/badge/Coverage-96%25-brightgreen.svg?longCache=true&style=flat)
+
 # Divido Code Challenge with Go
 
 > Warehouse Stocks Checker
@@ -40,3 +42,13 @@ endpoints to be mocked based on the tests you are writing.
 
 - High performance for speed and memory usage
 - Support graceful shutdown for the worker
+
+## How to run
+
+The app accepts command line arguments:
+ * `-api <address>` (required) -- base URL of warehouse API, e.g. `https://api.warehouse.tld/v1`
+ * `-input <source>` (required) -- source CSV, can be either local file path, or URL. Also, can be omitted if the last command line argument is `--`, in this case the app will read input from `stdin`. 
+ * `-interval 60s` (optional) -- interval between request runs. The format should be supported by `time.ParseDelay()` function.
+ * `-workers 1` (optional) -- number of parallel API requests to make.
+
+Dockerfile can be found in the repository root that will run the app.

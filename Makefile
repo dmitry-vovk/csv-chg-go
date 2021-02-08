@@ -2,7 +2,7 @@ export SERVICE_NAME=go-challenge-tst
 export NETWORK=$(SERVICE_NAME)-net
 MINIMUM_TEST_COVERAGE=80
 
-default: clean fmt test check-coverage clean
+default: clean fmt test coverage clean
 
 clean:
 	docker-compose -f ./.divido/development/compose.yml rm --force
@@ -27,4 +27,4 @@ fmt:
 		-v $(PWD):/app \
 		-w /app \
 		-e GITHUB_TOKEN=${GITHUB_TOKEN} \
-		divido/gobuild:1.14-alpine3.11 sh -c "go mod tidy; go fmt ./..."
+		divido/gobuild:1.15-alpine3.12 sh -c "go mod tidy; go fmt ./..."
