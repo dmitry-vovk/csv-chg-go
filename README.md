@@ -1,4 +1,5 @@
 ![coverage-badge-do-not-edit](https://img.shields.io/badge/Coverage-97%25-brightgreen.svg?longCache=true&style=flat)
+![Test](https://github.com/dmitry-vovk/csv-chg-go/workflows/Test/badge.svg)
 
 # Divido Code Challenge with Go
 
