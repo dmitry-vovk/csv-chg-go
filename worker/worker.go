@@ -16,11 +16,13 @@ type Worker struct {
 	client   APIClient            // API client instance
 	interval time.Duration        // Delay between requests cycles
 	uuids    map[compact]struct{} // List of UUIDs
-	running  bool                 // Is the worker in running stage
-	wg       sync.WaitGroup       // Used to track request completion for graceful shutdown
-	doneC    chan struct{}        // Closed when requested to shut down
-	stoppedC chan struct{}        // Closed when shutdown has completed
-	limitC   chan struct{}        // Limits number of parallel requests
+	uuidsM   sync.Mutex           // Protective mutex for UUIDs list
+	deleteC  chan compact         // UUIDs to delete
+	// running  bool                 // Is the worker in running stage
+	wg       sync.WaitGroup // Used to track request completion for graceful shutdown
+	doneC    chan struct{}  // Closed when requested to shut down
+	stoppedC chan struct{}  // Closed when shutdown has completed
+	limitC   chan struct{}  // Limits number of parallel requests
 }
 
 const defaultWorkers = 1
@@ -30,6 +32,7 @@ func New(client APIClient) *Worker {
 	return &Worker{
 		client:   client,
 		uuids:    make(map[compact]struct{}),
+		deleteC:  make(chan compact),
 		doneC:    make(chan struct{}),
 		stoppedC: make(chan struct{}),
 		limitC:   make(chan struct{}, defaultWorkers),
@@ -50,7 +53,6 @@ func (w *Worker) WithInterval(interval time.Duration) *Worker {
 
 // Shutdown initiates worker stop and blocks until it finishes
 func (w *Worker) Shutdown() {
-	w.running = false
 	close(w.doneC)
 	<-w.stoppedC
 }

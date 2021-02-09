@@ -9,7 +9,7 @@ import (
 
 // Run is the main worker loop
 func (w *Worker) Run() {
-	w.running = true
+	go w.deleter()
 	t := time.NewTicker(w.interval)
 out:
 	for {
@@ -17,20 +17,26 @@ out:
 		case <-w.doneC:
 			break out
 		case <-t.C:
+			w.uuidsM.Lock()
 			for id := range w.uuids {
-				if !w.running {
-					log.Printf("Stopping in the middle of processing")
-					break
-				}
 				w.limitC <- struct{}{}
 				w.wg.Add(1)
 				go w.process(id)
 			}
+			w.uuidsM.Unlock()
 			w.wg.Wait()
 		}
 	}
 	t.Stop()
 	close(w.stoppedC)
+}
+
+func (w *Worker) deleter() {
+	for id := range w.deleteC {
+		w.uuidsM.Lock()
+		delete(w.uuids, id)
+		w.uuidsM.Unlock()
+	}
 }
 
 // process takes a UUID and runs API queries against it
@@ -39,7 +45,7 @@ func (w *Worker) process(id compact) {
 	if item, err := w.client.GetItem(uuid); err != nil {
 		if err == api.ErrBadRequest {
 			log.Printf("API indicated UUID %q not found, removing", uuid)
-			delete(w.uuids, id)
+			go func() { w.deleteC <- id }()
 		} else {
 			log.Printf("API error: %s", err)
 		}
@@ -49,7 +55,7 @@ func (w *Worker) process(id compact) {
 		if err = w.client.PostAlert(uuid); err != nil {
 			if err == api.ErrBadRequest {
 				log.Printf("API indicated UUID %q not found, removing", uuid)
-				delete(w.uuids, id)
+				go func() { w.deleteC <- id }()
 			} else {
 				log.Printf("API error: %s", err)
 			}

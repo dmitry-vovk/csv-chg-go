@@ -2,7 +2,6 @@ package worker
 
 import (
 	"bufio"
-	"errors"
 	"io"
 	"log"
 	"regexp"
@@ -12,10 +11,6 @@ import (
 
 // ReadUUIDs scans `r` for UUIDs, one per line
 func (w *Worker) ReadUUIDs(r io.Reader) error {
-	if w.running {
-		// We do not read for UUIDs in running stage
-		return errors.New("worker already running")
-	}
 	rUUID := regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 	scanner := bufio.NewScanner(r)
 	skipped := 0

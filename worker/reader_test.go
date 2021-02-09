@@ -31,8 +31,4 @@ func TestWorkerReader(t *testing.T) {
 	assert.Contains(t, logString, `Invalid UUID in line 7: "..."`)
 	assert.Contains(t, logString, `Duplicate UUID in line 8: "9E2CB4dd-bd6e-48aa-9c0d-696a058226ed"`)
 	assert.Contains(t, logString, `3 records loaded, 5 skipped in `)
-	w.running = true
-	if err := w.ReadUUIDs(f); assert.Error(t, err) {
-		assert.Equal(t, "worker already running", err.Error())
-	}
 }

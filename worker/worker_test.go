@@ -15,10 +15,8 @@ func TestConstructor(t *testing.T) {
 
 func TestShutdown(t *testing.T) {
 	w := New(nil).WithInterval(time.Second)
-	assert.False(t, w.running)
 	go w.Run()
 	time.Sleep(10 * time.Millisecond) // Wait for goroutine to start
-	assert.True(t, w.running)
 	assert.Eventually(t, func() bool {
 		w.Shutdown()
 		return true
