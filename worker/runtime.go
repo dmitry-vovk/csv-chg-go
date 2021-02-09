@@ -9,34 +9,25 @@ import (
 
 // Run is the main worker loop
 func (w *Worker) Run() {
-	go w.deleter()
 	t := time.NewTicker(w.interval)
 out:
 	for {
 		select {
 		case <-w.doneC:
 			break out
+		case id := <-w.deleteC:
+			delete(w.uuids, id)
 		case <-t.C:
-			w.uuidsM.Lock()
 			for id := range w.uuids {
 				w.limitC <- struct{}{}
 				w.wg.Add(1)
 				go w.process(id)
 			}
-			w.uuidsM.Unlock()
 			w.wg.Wait()
 		}
 	}
 	t.Stop()
 	close(w.stoppedC)
-}
-
-func (w *Worker) deleter() {
-	for id := range w.deleteC {
-		w.uuidsM.Lock()
-		delete(w.uuids, id)
-		w.uuidsM.Unlock()
-	}
 }
 
 // process takes a UUID and runs API queries against it

@@ -16,13 +16,11 @@ type Worker struct {
 	client   APIClient            // API client instance
 	interval time.Duration        // Delay between requests cycles
 	uuids    map[compact]struct{} // List of UUIDs
-	uuidsM   sync.Mutex           // Protective mutex for UUIDs list
 	deleteC  chan compact         // UUIDs to delete
-	// running  bool                 // Is the worker in running stage
-	wg       sync.WaitGroup // Used to track request completion for graceful shutdown
-	doneC    chan struct{}  // Closed when requested to shut down
-	stoppedC chan struct{}  // Closed when shutdown has completed
-	limitC   chan struct{}  // Limits number of parallel requests
+	wg       sync.WaitGroup       // Used to track request completion for graceful shutdown
+	doneC    chan struct{}        // Closed when requested to shut down
+	stoppedC chan struct{}        // Closed when shutdown has completed
+	limitC   chan struct{}        // Limits number of parallel requests
 }
 
 const defaultWorkers = 1
